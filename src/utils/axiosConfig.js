@@ -2,6 +2,7 @@ const getApiConfig = (token) => {
     return {
         headers: {
             Authorization: 'Bearer ' + token,
+            
         },
     };
 };

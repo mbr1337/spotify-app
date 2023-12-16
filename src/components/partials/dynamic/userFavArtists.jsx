@@ -2,28 +2,32 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { endpoints } from "../../../endpoints";
 import getApiConfig from "../../../utils/axiosConfig";
-import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from "@mui/material";
+import { Box, Fade, Skeleton, Typography, Zoom } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { useSelector } from "react-redux";
 
-function UserFavArtists({ token }) {
-    const [topArtists, setTopArtists] = useState([]);
+function UserFavArtists() {
+    const [topArtists, setTopArtists] = useState(null);
+    const token = useSelector((state) => state.auth.token);
 
     useEffect(() => {
-
         async function getUserTopArtists() {
             try {
                 const response = await axios.get(endpoints.userTopArtists, getApiConfig(token));
                 if (response.status === 200) {
-                    console.log(response.data.items);
-                    setTopArtists(response.data.items);
-                    // const artistsHrefs = response.data.items.map(item => {
-                    //     return {
-                    //         id: item.id,
-                    //         externalUrl: item.external_urls && item.external_urls.spotify ? item.external_urls.spotify : null
-                    //     };
-                    // });
-                    // setArtistsHrefs(artistsHrefs);
-                    // console.log(artistsHrefs);
+                    const sortedTopArtists = response.data.items.slice(0, 3).sort((a, b) => {
+                        // Custom sorting function to place #1 in the middle
+                        const indexA = response.data.items.indexOf(a);
+                        const indexB = response.data.items.indexOf(b);
+                        const middleIndex = Math.floor(response.data.items.slice(0, 3).length / 2);
+
+                        if (indexA === middleIndex) return -1;
+                        if (indexB === middleIndex) return 1;
+                        return 0;
+                    });
+
+                    const remainingArtists = response.data.items.slice(3);
+                    setTopArtists([...sortedTopArtists, ...remainingArtists]);
                 }
                 if (response.status === 401) {
                     // refreshToken();
@@ -33,39 +37,63 @@ function UserFavArtists({ token }) {
             }
         }
         getUserTopArtists();
-    }, [])
-
+    }, [token])
 
     return (
-        <Box>
-            {topArtists === null ? <p>Loading...</p> : (
-                <div>
-                    <Typography variant="h4" style={{ textAlign: "center" }}>Top Artists:</Typography>
-                    <ImageList cols={3} gap={20}>
-                        {topArtists.map((artist) => (
-                            <ImageListItem key={artist.id}>
-                                {/* <a href={artist.external_urls.spotify} target="_blank"> */}
-                                <img
-                                    className="topCards"
-                                    src={artist.images[1].url}
-                                    alt={artist.name}
-                                    loading="lazy"
-                                />
-                                {/* </a> */}
-                                <ImageListItemBar sx={{ textAlign: "center" }}
-                                    title={artist.name}
-                                    subtitle={<span>Popularity: {artist.popularity}</span>}
-                                    position="below"
-                                />
-                            </ImageListItem>
+        <>
+            {!topArtists ? (
+                <Box>
+                    <Skeleton variant="text" height={40} width="25%" sx={{ mx: "auto" }} />
+                    <Grid2 container spacing={2}>
+                        {[...Array(9)].map((_, index) => (
+                            <Fade in={true} timeout={700} key={index}>
+                                <Grid2 xs={6} md={6} lg={4} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                    <Skeleton animation="wave" variant="rounded" width="75%" height={200} sx={{ borderRadius: "10%" }} />
+                                    <Skeleton animation="wave" variant="text" width="40%" height={20} sx={{ bgcolor: 'grey.800' }} />
+                                    <Skeleton animation="wave" variant="text" width="30%" height={20} sx={{ bgcolor: 'grey.800' }} />
+                                </Grid2>
+                            </Fade>
                         ))}
-                    </ImageList>
-                </div>
+                    </Grid2>
+                </Box>
+            ) : (
+                <Box>
+                    <Zoom in={true} timeout={750}>
+                        <Typography variant="h2" sx={{ textAlign: "center", p: 2 }}>Favorite Artists:</Typography>
+                    </Zoom>
+                    <Grid2 container spacing={2}>
+                        {topArtists.map((artist, index) => (
+                            <Zoom
+                                in={true}
+                                timeout={500}
+                                key={artist.id}
+                                style={{ transitionDelay: `${300 + index * 100}ms` }}
+                            >
+                                <Grid2 xs={6} md={6} lg={4} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                    <img
+                                        className="topArtistCards"
+                                        src={artist.images[0].url}
+                                        alt={artist.name}
+                                        loading="lazy"
+                                        style={{
+                                            marginBottom: 8,
+                                            border: index === 1 ? "4px solid gold" : index === 0 ? "4px solid silver" : index === 2 ? "4px solid #765341" : "none"
+                                        }}
+                                    />
+                                    <Typography variant="h4" style={{ textAlign: "center" }}>
+                                        {artist.name}
+                                    </Typography>
+                                    <Typography variant="h5" style={{ textAlign: "center" }}>
+                                        Popularity: {artist.popularity}
+                                    </Typography>
+                                </Grid2>
+                            </Zoom>
+                        ))}
+                    </Grid2>
+                </Box>
             )}
-        </Box>
-
+        </>
     )
-
 }
 
 export default UserFavArtists;

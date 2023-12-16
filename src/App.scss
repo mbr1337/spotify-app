@@ -7,7 +7,6 @@
 html,
 body {
   height: 100%;
-  font-family: AileronThin;
 }
 
 body {
@@ -45,7 +44,6 @@ body {
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
 
 .main-wrapper {
   padding-top: 45px;
@@ -104,26 +102,48 @@ body {
   position: relative;
   top: 1px;
 }
-
-img.topCards {
-  width: 50%;
-  border-radius: 50%;
-  float: left;
+.avatarW {
+  width: 250px;
+  height: 250px;
+  border-radius: 45%;
+}
+img.topTrackCards {
+  border-radius: 10%;
 }
 
+img.topArtistCards {
+  border-radius: 10%;
+  height: 250px;
+  width: 250px;
+}
+img.playlistCards {
+  border-radius: 10%;
+  max-width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+@media only screen and (max-width: 850px) {
+  img.topArtistCards,
+  .avatarW {
+    height: 150px; /* Adjust the height for smaller screens */
+    width: 150px; /* Adjust the width for smaller screens */
+  }
+}
+@media only screen and (max-width: 550px) {
+  img.topArtistCards,
+  .avatarW {
+    height: 75px; /* Adjust the height for smaller screens */
+    width: 75px; /* Adjust the width for smaller screens */
+  }
+}
 a {
   text-decoration: none;
   color: white;
 }
 
-ul>li {
+ul > li {
   list-style-type: none;
-}
-
-.avatarW {
-  width: 250px;
-  height: 250px;
-  border-radius: 45%;
 }
 
 .hvr-underline-from-left {
@@ -143,8 +163,8 @@ ul>li {
   left: 0;
   right: 100%;
   bottom: 0;
-  background: #2098d1;
-  height: 4px;
+  background: #44c767;
+  height: 2px;
   -webkit-transition-property: right;
   transition-property: right;
   -webkit-transition-duration: 0.3s;
@@ -157,4 +177,25 @@ ul>li {
 .hvr-underline-from-left:focus:before,
 .hvr-underline-from-left:active:before {
   right: 0;
+}
+hr {
+  height: 1px;
+  background: gray;
+  margin: 0.25em;
+}
+
+.gridItem {
+  transition: background 0.3s; /* Add a smooth transition effect */
+
+  /* Initial style */
+  background: rgb(35, 35, 35); /* Set your initial background color */
+
+  /* Hover style */
+  &:hover {
+    background: rgb(45, 45, 45); /* Adjust the background color for the hover effect */
+    border-radius: 5%;
+    filter: brightness(
+      110%
+    ); /* You can still use filter for additional brightness if needed */
+  }
 }

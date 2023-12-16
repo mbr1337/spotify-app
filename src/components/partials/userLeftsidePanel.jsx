@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { endpoints } from "../../endpoints";
 import getApiConfig from "../../utils/axiosConfig";
-import { Box, Grid, Typography } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { Box, Fade, Grid, Skeleton, Typography } from "@mui/material";
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import MicNoneIcon from '@mui/icons-material/MicNone';
@@ -16,7 +15,7 @@ import UserPlaylists from "./userPlaylists";
 
 function UserLeftsidePanel() {
 
-    const [userPlaylists, setUserPlaylists] = useState([]);
+    const [userPlaylists, setUserPlaylists] = useState(null);
     const token = useSelector((state) => state.auth.token);
 
     useEffect(() => {
@@ -24,136 +23,111 @@ function UserLeftsidePanel() {
             try {
                 const response = await axios.get(endpoints.userPlaylists, getApiConfig(token));
                 if (response.status === 200) {
-                    setUserPlaylists(response.data.items);
-                    console.log(response.data.items);
+
+                    const allPlaylists = [];
+                    allPlaylists.push(...response.data.items);
+                    console.log("First 50 Playlists:", allPlaylists);
+                    let nextUrl = response.data.next;
+                    while (nextUrl) {
+                        const nextResponse = await axios.get(nextUrl, getApiConfig(token));
+                        if (nextResponse.status === 200) {
+                            console.log(`fetching next ${nextResponse.data.items.length} playlists...`);
+                            console.log(nextResponse.data.items);
+                            allPlaylists.push(...nextResponse.data.items);
+                            nextUrl = nextResponse.data.next;
+                        } else {
+                            break;
+                        }
+                    }
+                    setUserPlaylists(allPlaylists);
+
                 }
+
 
             } catch (error) {
                 console.error(error);
             }
         }
-
         getUserPlaylists();
-    }, [])
+    }, [token])
 
 
     return (
-        <Box
-        // sx={{ pt: 20 }}
-        >
-            <Box>
-                <Typography variant="h3" sx={{ m: 2, fontWeight: "semi-bold" }} >Discover</Typography>
-                <Grid2 container>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1} >
-                                <PersonOutlinedIcon />
-                            </Grid2>
-                            <Grid2 p={1}>
-                                <Link to="/" className="hvr-underline-from-left">Home</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1} >
-                                <PersonOutlinedIcon />
-                            </Grid2>
-                            <Grid2 p={1}>
-                                <Link to="./newReleases" className="hvr-underline-from-left">Made for You</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1}>
-                                <MicNoneIcon />
-                            </Grid2>
-                            <Grid2 p={1} >
-                                <Link to="./favoriteArtists" className="hvr-underline-from-left">Favorite Artists</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1}>
-                                <MusicNoteIcon />
-                            </Grid2>
-                            <Grid2 p={1} >
-                                <Link to="./favoriteSongs" className="hvr-underline-from-left">Favorite Songs</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1}>
-                                <AlbumIcon />
-                            </Grid2>
-                            <Grid2 p={1}>
-                                <Link to="./albums" className="hvr-underline-from-left">Albums</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                </Grid2>
-                <Typography variant="h3" sx={{ m: 2, fontWeight: "semi-bold" }} >Library</Typography>
-                <Grid2 container>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1}>
-                                <QueueMusicIcon />
-                            </Grid2>
-                            <Grid2 p={1}>
-                                <Link to="./playlists" className="hvr-underline-from-left">Playlists</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1}>
-                                <PodcastsIcon />
-                            </Grid2>
-                            <Grid2 p={1}>
-                                <Link to="./podcasts" className="hvr-underline-from-left">Podcasts</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 xs={12} sx={{ marginLeft: 3, mt: 1 }}>
-                        <Grid2 container alignItems="center">
-                            <Grid2 xs={1}>
-                                <MicNoneIcon />
-                            </Grid2>
-                            <Grid2 p={1} >
-                                <Link to="./followedArtists" className="hvr-underline-from-left">Followed Artists</Link>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                </Grid2>
-                <Typography variant="h3" sx={{ m: 2, fontWeight: "semi-bold" }}>Playlists</Typography>
+        <>
+            <Fade in={true} timeout={2000} data-testid="user-playlists">
                 <Box>
-                    <Grid2 container>
-                        {userPlaylists === null ? (
-                            <p>Loading Playlists... </p>
-                        ) :
-                            (
-                                <UserPlaylists playlists={userPlaylists.slice(0, 10)} />
-                                /* userPlaylists.slice(0, 10).map((playlist) => (
-                                    <Grid2 container key={playlist.id} xs={12} alignItems="center" sx={{ marginLeft: 3, mt: 1, mb: 1, p: 1 }}>
-                                        <Grid2 xs={1}>
-                                            <QueueMusicIcon />
-                                        </Grid2>
-                                        <Grid2 xs={11} sx={{ p: 1 }} >
-                                            <a href={playlist.external_urls.spotify}>{playlist.name}</a>
-                                        </Grid2>
-                                    </Grid2>
-                                )) */
-                            )
-                        }
-                    </Grid2>
+                    <Typography variant="h2" sx={{ m: 2, fontWeight: "semi-bold" }}>Discover</Typography>
+                    <Grid container>
+                        {[
+                            { icon: <PersonOutlinedIcon />, link: "/", text: "Home" },
+                            { icon: <PersonOutlinedIcon />, link: "./newReleases", text: "Made for You" },
+                            { icon: <MicNoneIcon />, link: "./favoriteArtists", text: "Favorite Artists" },
+                            { icon: <MusicNoteIcon />, link: "./favoriteSongs", text: "Favorite Songs" },
+                            { icon: <AlbumIcon />, link: "./albums", text: "Albums" },
+                        ].map((item, index) => (
+                            <Grid key={index} item xs={12} sx={{ marginLeft: 3, mt: 1 }}>
+                                <Grid container alignItems="center">
+                                    <Grid item xs={1}>
+                                        {item.icon}
+                                    </Grid>
+                                    <Grid item p={1}>
+                                        <Typography variant="h3">
+                                            <Link to={item.link} className="hvr-underline-from-left">
+                                                {item.text}
+                                            </Link>
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        ))}
+                    </Grid>
+                    <Typography variant="h2" sx={{ m: 2, fontWeight: "semi-bold" }}>Library</Typography>
+                    <Grid container>
+                        {[
+                            { icon: <QueueMusicIcon />, link: "./playlists", text: "Playlists" },
+                            { icon: <PodcastsIcon />, link: "./podcasts", text: "Podcasts" },
+                            { icon: <MicNoneIcon />, link: "./followedArtists", text: "Followed Artists" },
+                        ].map((item, index) => (
+                            <Grid key={index} item xs={12} sx={{ marginLeft: 3, mt: 1 }}>
+                                <Grid container alignItems="center">
+                                    <Grid item xs={1}>
+                                        {item.icon}
+                                    </Grid>
+                                    <Grid item p={1}>
+                                        <Typography variant="h3">
+                                            <Link to={item.link} className="hvr-underline-from-left">
+                                                {item.text}
+                                            </Link>
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        ))}
+                    </Grid>
                 </Box>
-            </Box>
-        </Box>
-    )
-
+            </Fade>
+            <Fade in={true} timeout={2000}>
+                <Box>
+                    <Typography variant="h2" sx={{ m: 2, fontWeight: "semi-bold" }}>Playlists</Typography>
+                    <Grid container>
+                        {!userPlaylists ? (
+                            <>
+                                {[...Array(15)].map((_, index) => (
+                                    <Grid item xs={12} key={index}>
+                                        <Typography>
+                                            <Skeleton data-testid="loading-skeleton" width={`${Math.round(Math.random() * (75 - 20 + 1)) + 20}%`} sx={{ m: 2, bgcolor: 'grey.800' }} />
+                                        </Typography>
+                                    </Grid>
+                                ))}
+                            </>
+                        ) : (
+                            <UserPlaylists playlists={userPlaylists} />
+                        )}
+                    </Grid>
+                </Box>
+            </Fade>
+        </>
+    );
 }
 
 export default UserLeftsidePanel;

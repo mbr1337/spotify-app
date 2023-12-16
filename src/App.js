@@ -5,9 +5,9 @@ import Login from './components/Login';
 import './App.scss';
 import UserPanelLayout from './components/partials/userPanelLayout';
 import { Outlet } from 'react-router-dom';
+import { Fade, Zoom } from '@mui/material';
 
 function App() {
-  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
 
@@ -20,29 +20,26 @@ function App() {
         dispatch(setToken(json.access_token));
       } catch (error) {
         console.error('Error fetching token:', error);
-      } finally {
-        setLoading(false);
       }
     }
 
     getToken();
   }, [dispatch]);
 
-  if (loading) {
-    // You can add a loading indicator or placeholder here
-    return <div>Loading...</div>;
-  }
 
   return (
-    <main>
-      {token === '' ? (
-        <Login />
-      ) : (
-        <UserPanelLayout>
-          <Outlet />
-        </UserPanelLayout>
-      )}
-    </main>
+    <Fade in={true} timeout={700}>
+      <main>
+        {token === '' ? (
+          <Login />
+        ) : (
+          <UserPanelLayout>
+            <Outlet />
+          </UserPanelLayout>
+        )}
+      </main>
+    </Fade>
+
   );
 }
 

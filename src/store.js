@@ -1,5 +1,4 @@
 // store.js
-
 import { createSlice, configureStore } from '@reduxjs/toolkit';
 
 const authSlice = createSlice({
@@ -13,6 +12,7 @@ const authSlice = createSlice({
         },
     },
 });
+
 const authSlice2 = createSlice({
     name: 'auth2',
     initialState: {
@@ -36,6 +36,7 @@ const userSlice = createSlice({
         },
     },
 });
+
 const rootReducer = {
     auth: authSlice.reducer,
     auth2: authSlice2.reducer,
@@ -48,8 +49,9 @@ const store = configureStore({
     reducer: rootReducer,
 });
 
+// Destructure the actions property from each slice
 export const { setToken } = authSlice.actions;
 export const { setUserData } = userSlice.actions;
-export const {setRefreshToken} = authSlice2.actions;
+export const { setRefreshToken } = authSlice2.actions;
 
 export default store;

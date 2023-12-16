@@ -4,10 +4,12 @@ import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Too
 import { endpoints } from "../../endpoints";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useSelector, useDispatch } from "react-redux";
-import { setUserData } from "../../store";
+import { setToken, setUserData, setRefreshToken } from '../../store';
 import getApiConfig from "../../utils/axiosConfig";
 import getRefreshToken from "../../utils/refreshToken";
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { Link } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
+const settings = ['Profile', 'Logout'];
 
 
 function UserHeader() {
@@ -53,7 +55,6 @@ function UserHeader() {
         getUserData();
         // getNeffexData();
     }, [dispatch])
-    // po kliknięciu w profil użytkownika / album / utwór przenosi się do nowego komponentu albo coś ala lightbox na stronie głównej z informacjami na dany temat i dopiero później przycisk przejdz do spotify 
 
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -73,9 +74,16 @@ function UserHeader() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+    const logout = () => {
+        dispatch(setToken('')); // Clear the token in the store
+        // dispatch(setRefreshToken('')); 
+        dispatch(setUserData(null));
+        setAnchorElUser(null);
+        window.location = '/login';
+    };
 
     return (
-        <Box sx={{ p: 4 }}>
+        <Box sx={{ p: 4, }}>
             {userData === null ?
                 <p>Loading user data...</p>
                 : (
@@ -87,9 +95,8 @@ function UserHeader() {
                                         <Tooltip title="Open settings">
                                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                                 {userData.images && userData.images.length > 1 ? (
-                                                    <Avatar alt={userData.display_name} src={userData.images[1].url} />
+                                                    <Avatar alt={userData.display_name} src={userData.images[0].url} />
                                                 ) : (
-                                                    // Provide a default avatar or a placeholder image
                                                     <Avatar alt={userData.display_name} />
                                                 )}
                                             </IconButton>
@@ -110,11 +117,19 @@ function UserHeader() {
                                             open={Boolean(anchorElUser)}
                                             onClose={handleCloseUserMenu}
                                         >
-                                            {settings.map((setting) => (
-                                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                                    <Typography textAlign="center">{setting}</Typography>
-                                                </MenuItem>
-                                            ))}
+                                            {/* {settings.map((setting) => ( */}
+                                            <MenuItem
+                                                // key={setting}
+                                                onClick={handleCloseUserMenu}>
+                                                <Link style={{ color: "black" }} to='/profile'>
+                                                    <Typography textAlign="center">{settings[0]}</Typography>
+                                                </Link>
+                                            </MenuItem>
+                                            <MenuItem
+                                                onClick={logout}>
+                                                <Typography textAlign="center">{settings[1]}</Typography>
+                                            </MenuItem>
+                                            {/* ))} */}
                                         </Menu>
                                     </Box>
                                 </Toolbar>
