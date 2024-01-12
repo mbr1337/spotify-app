@@ -5,17 +5,35 @@ import getApiConfig from "../../../utils/axiosConfig";
 import { Box, Fade, Skeleton, Typography, Zoom } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useSelector } from "react-redux";
+import UserAlbumsBubbleChart from "./userAlbumsBubbleChart";
 
 function UserAlbums() {
     const token = useSelector((state) => state.auth.token);
-    const [userAlbums, setUserAlbums] = useState(null);
+    const [userAlbums, setUserAlbums] = useState([]);
 
     useEffect(() => {
         async function getUserAlbums() {
             try {
                 const response = await axios.get(endpoints.userAlbums, getApiConfig(token));
                 if (response.status === 200) {
-                    setUserAlbums(response.data.items);
+                    console.log('response.data', response.data.items)
+                    const allAlbums = [];
+                    if (response.data.items) {
+                        allAlbums.push(...response.data.items);
+                        let nextUrl = response.data.next;
+                        while (nextUrl) {
+                            const nextResponse = await axios.get(nextUrl, getApiConfig(token));
+                            if (nextResponse.status === 200) {
+                                console.log(`fetching next ${response.data.items.length} albums...`);
+                                console.log("next albums: ", nextResponse.data.items);
+                                allAlbums.push(...nextResponse.data.items);
+                                nextUrl = nextResponse.data.next;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    setUserAlbums(allAlbums);
                 }
             } catch (error) {
                 console.error(error);
@@ -26,7 +44,7 @@ function UserAlbums() {
 
     return (
         <>
-            {!userAlbums ? (
+            {Array.isArray(userAlbums) && userAlbums.length === 0 ? (
                 <Grid2 container spacing={2}>
                     {[...Array(9)].map((_, index) => (
                         <Fade
@@ -49,6 +67,7 @@ function UserAlbums() {
                     <Zoom in={true} timeout={750}>
                         <Typography variant="h2" sx={{ textAlign: "center", p: 2 }}>Saved albums:</Typography>
                     </Zoom>
+                    <UserAlbumsBubbleChart userAlbums={userAlbums} />
                     <Grid2 container spacing={2}>
                         {userAlbums.map(({ added_at, album }, index) => {
                             const formattedDate = added_at.slice(0, 10);

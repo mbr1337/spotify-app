@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Divider, Fade, Skeleton, Typography, Zoom } from "@mui/material";
+import { Fade, Skeleton, Typography, Zoom } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { endpoints } from "../../../endpoints";
 import { useSelector } from "react-redux";
 import getApiConfig from "../../../utils/axiosConfig";
 import { Link } from "react-router-dom";
-
+import unknown_album_placeholder from '../../../imgs/unknown_album_placeholder.png';
 
 export function truncateString(str, maxLength) {
     if (str == null || str === undefined) {
@@ -57,7 +57,7 @@ function UserPlaylists() {
         }
 
         getUserPlaylists();
-    }, [])
+    }, [token])
 
     useEffect(() => {
         console.log("overall playlists:", userPlaylists);
@@ -66,6 +66,9 @@ function UserPlaylists() {
 
     return (
         <>
+            <Zoom in={true} timeout={750}>
+                <Typography variant="h2" sx={{ textAlign: "center", p: 2 }}>Your Playlists</Typography>
+            </Zoom>
             {userPlaylists ?
                 <Grid2 container spacing={2} >
                     {userPlaylists.map((playlist, index) => (
@@ -76,12 +79,15 @@ function UserPlaylists() {
                             timeout={500}
                         >
                             <Grid2 xs={6} sm={4} md={3} lg={2} sx={{ textAlign: "center" }} className="gridItem">
-                                <Link to={`/singularPlaylist/${playlist.id}`}>
-                                    <Grid2 xs={12} >
-                                        {playlist.images ? (
+                                <Link to={`/playlist/${playlist.id}`}>
+                                    <Grid2 xs={12} sx={{ height: "200px", overflow: "hidden" }}>
+                                        {playlist.images[0] ? (
                                             <img className="playlistCards" src={playlist?.images[0]?.url} alt={playlist.name}></img>
                                         ) : (
-                                            <></>
+                                            <>
+                                                <img className="playlistCards" src={unknown_album_placeholder} alt={playlist.name}></img>
+
+                                            </>
                                         )}
                                     </Grid2>
                                     <Grid2 xs={12}>
@@ -94,8 +100,9 @@ function UserPlaylists() {
                                         <hr></hr>
                                     </Grid2>
                                     <Grid2 xs={12}>
-                                        <Typography variant="h6">
-                                            {playlist.description ? truncateString(playlist.description, 40) : "No description provided."}
+                                        <Typography variant="h6" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                            {/* {playlist.description ? truncateString(playlist.description, 40) : "No description provided."} */}
+                                            {playlist.description}
                                         </Typography>
                                     </Grid2>
                                 </Link>

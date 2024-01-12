@@ -20,7 +20,6 @@ function ArtistPieChart({ artistCounts, useGenre = false, arcLabel = true }) {
         margin: { right: 10 },
         width: 550,
         height: 500,
-        legend: { hidden: true },
     };
 
     const TOTAL = initialData.map((item) => item.value).reduce((a, b) => a + b, 0);
@@ -63,16 +62,36 @@ function ArtistPieChart({ artistCounts, useGenre = false, arcLabel = true }) {
 
     return (
         <>
-            <Typography variant='h4' sx={{ m: "auto" }}>{useGenre ? "Genre" : "Artist"} Distribution:</Typography>
+            <Typography variant='h4' sx={{ textAlign: "center" }}>{useGenre ? "Genre" : "Artist"} Distribution:</Typography>
             <Box data-testid="mocked-pie-chart" sx={{ display: 'flex', justifyContent: 'center' }}>
                 <PieChart
                     series={[
-                        { outerRadius: 150, innerRadius: 100, data: chartData, arcLabel: getArcLabel },
+                        {
+                            outerRadius: 150, innerRadius: 100, data: chartData, arcLabel: getArcLabel,
+                            highlightScope: { faded: 'global', highlighted: 'item' },
+                            faded: { innerRadius: 85, color: 'gray' },
+                        },
                     ]}
                     sx={{
                         [`& .${pieArcLabelClasses.root}`]: {
                             fill: 'white',
                             fontSize: 16,
+                        },
+                    }}
+                    slotProps={{
+                        legend: {
+                            hidden: false,
+                            direction: 'row',
+                            position: { vertical: 'bottom', horizontal: 'middle' },
+                            labelStyle: {
+                                fontSize: 16,
+                                fill: 'white',
+                            },
+                            padding: -10,
+                            itemMarkWidth: 20,
+                            itemMarkHeight: 15,
+                            markGap: 10,
+                            itemGap: 15,
                         },
                     }}
                     {...sizing}

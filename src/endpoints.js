@@ -7,7 +7,10 @@ export const endpoints = {
     startStopPlaying: 'spotify/player/play',
     userFollowedArtists: 'spotify/followedArtists',
     newReleases: 'spotify/newReleases',
-    userEpisodes: 'spotify/episodes',
+    userShows: 'spotify/shows',
+    showEpisode: '/spotify/shows/',
     userPlaylists: 'spotify/playlists',
+    playlist: '/spotify/playlist/',
     userAlbums: 'spotify/albums',
+    checkSavedEpisodes: '/spotify/checkSavedEpisode/',
 }

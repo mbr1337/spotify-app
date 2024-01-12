@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { endpoints } from "../../../endpoints";
 import getApiConfig from "../../../utils/axiosConfig";
-import { Box, Fade, Hidden, Skeleton, Typography, Zoom } from "@mui/material";
+import { Box, Fade, Hidden, Skeleton, Tooltip, Typography, Zoom } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useDispatch, useSelector } from "react-redux";
 import ArtistPieChart from "./favArtistsPieChart";
 import { setRefreshToken } from "../../../store";
+import { HelpOutline } from "@mui/icons-material";
 
 function UserFavSongs() {
     const [topTracks, setTopTracks] = useState(null);
@@ -92,16 +93,25 @@ function UserFavSongs() {
 
     return (
         <>
-            {/* <Zoom in={true} timeout={700}> */}
-            <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                <ArtistPieChart artistCounts={artistCounts} />
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Tooltip title="The popularity of a track is a value between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are.">
+                    <HelpOutline />
+                </Tooltip>
             </Box>
-            {artistsForChart && artistsForChart.length > 0 && (
-                <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                    <ArtistPieChart artistCounts={artistsForChart} useGenre arcLabel={false} />
-                </Box>
-            )}
-            {/* </Zoom> */}
+            <Box>
+                <Grid2 container spacing={2}>
+                    <Grid2 xs={12} md={6}>
+                        {artistCounts ? (
+                            <ArtistPieChart artistCounts={artistCounts} />
+                        ) : "Loading chart data..."}
+                    </Grid2>
+                    <Grid2 xs={12} md={6}>
+                        {artistsForChart && artistsForChart.length > 0 ? (
+                            <ArtistPieChart artistCounts={artistsForChart} useGenre arcLabel={false} />
+                        ) : "Loading chart data..."}
+                    </Grid2>
+                </Grid2>
+            </Box>
             <Box>
                 <Zoom in={true} timeout={700}>
                     <Typography variant="h4" sx={{ textAlign: "center", m: 2 }}>
@@ -210,9 +220,22 @@ function UserFavSongs() {
                                                             </span>
                                                         ))}
                                                     </Typography>
-                                                    <Typography variant="button">
-                                                        Track Popularity: {track.popularity}
-                                                    </Typography>
+                                                    <Box sx={{ display: "flex", justifyContent: index % 2 === 0 ? "flex-start" : "flex-end", alignItems: "center" }}>
+                                                        {index % 2 === 0 ? (
+                                                            <>
+                                                                <Typography variant="button">
+                                                                    Track Popularity: {track.popularity}
+                                                                </Typography>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Typography variant="button">
+                                                                    Track Popularity: {track.popularity}
+                                                                </Typography>
+
+                                                            </>
+                                                        )}
+                                                    </Box>
                                                 </Box>
                                             </Grid2>
                                         </Grid2>
@@ -248,9 +271,14 @@ function UserFavSongs() {
                                                             </span>
                                                         ))}
                                                     </Typography>
-                                                    <Typography variant="button">
-                                                        Track Popularity: {track.popularity}
-                                                    </Typography>
+                                                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                        <Typography variant="button">
+                                                            Track Popularity: {track.popularity}
+                                                        </Typography>
+                                                        <Tooltip title="The popularity of a track is a value between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are.">
+                                                            <HelpOutline />
+                                                        </Tooltip>
+                                                    </Box>
                                                 </Box>
                                             </Grid2>
                                         </Grid2>

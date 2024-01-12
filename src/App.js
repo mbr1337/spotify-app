@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from './store';
 import Login from './components/Login';
 import './App.scss';
 import UserPanelLayout from './components/partials/userPanelLayout';
 import { Outlet } from 'react-router-dom';
-import { Fade, Zoom } from '@mui/material';
+import { Container, Fade } from '@mui/material';
 
 function App() {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ function App() {
 
   return (
     <Fade in={true} timeout={700}>
-      <main>
+      <Container maxWidth={false} disableGutters>
         {token === '' ? (
           <Login />
         ) : (
@@ -37,7 +37,7 @@ function App() {
             <Outlet />
           </UserPanelLayout>
         )}
-      </main>
+      </Container>
     </Fade>
 
   );

@@ -115,13 +115,23 @@ img.topArtistCards {
   border-radius: 10%;
   height: 250px;
   width: 250px;
+  object-fit: cover;
 }
 img.playlistCards {
+  border-radius: 10%;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  object-fit: contain;
+}
+img.responsiveIMG {
   border-radius: 10%;
   max-width: 100%;
   height: auto;
   padding: 0;
   margin: 0;
+  object-fit: contain;
 }
 @media only screen and (max-width: 850px) {
   img.topArtistCards,
@@ -136,6 +146,13 @@ img.playlistCards {
     height: 75px; /* Adjust the height for smaller screens */
     width: 75px; /* Adjust the width for smaller screens */
   }
+}
+.placeholder {
+  border-radius: 10%;
+  width: 135px;
+  height: 135px;
+  margin: 0;
+  padding: 0;
 }
 a {
   text-decoration: none;
@@ -185,17 +202,42 @@ hr {
 }
 
 .gridItem {
-  transition: background 0.3s; /* Add a smooth transition effect */
+  transition: background 0.3s;
 
-  /* Initial style */
-  background: rgb(35, 35, 35); /* Set your initial background color */
+  background: rgb(35, 35, 35);
 
-  /* Hover style */
   &:hover {
-    background: rgb(45, 45, 45); /* Adjust the background color for the hover effect */
+    background: rgb(45, 45, 45);
     border-radius: 5%;
-    filter: brightness(
-      110%
-    ); /* You can still use filter for additional brightness if needed */
+    filter: brightness(110%);
   }
+}
+
+@keyframes moveUpDown {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-25px);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(218, 203, 5, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.podium {
+  animation: moveUpDown 5s infinite, glow 3.5s infinite;
+}
+.podiumGlow {
+  animation: glow 3.5s infinite;
 }

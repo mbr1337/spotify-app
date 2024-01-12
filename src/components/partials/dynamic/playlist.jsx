@@ -20,7 +20,7 @@ function Playlist() {
         const fetchData = async () => {
             const allTracks = [];
             try {
-                const response = await axios.get(playlist_id, getApiConfig(token));
+                const response = await axios.get(endpoints.playlist + playlist_id, getApiConfig(token));
                 if (response.status === 200) {
                     console.log('Playlist data:', response.data);
                     setPlaylist(response.data);
@@ -169,17 +169,19 @@ function Playlist() {
             {playlist ? (
                 <>
                     {playlistTracks && playlistTracks.length !== 0 && (
-                        <>
-                            <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+                        <Grid2 container>
+                            <Grid2 xs={12} md={6}>
                                 <ArtistPieChart artistCounts={artistsForChart} labelField='label' />
-                            </Box>
-                            {/* Conditionally render the second pie chart */}
-                            {artistsForChart && artistsForChart.length > 0 && (
-                                <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+                            </Grid2>
+                            <Grid2 xs={12} md={6}>
+                                {/* Conditionally render the second pie chart */}
+                                {artistsForChart && artistsForChart.length > 0 && (
                                     <ArtistPieChart artistCounts={artistsForChart} useGenre arcLabel={false} />
-                                </Box>
-                            )}
-                        </>
+                                )}
+                            </Grid2>
+
+
+                        </Grid2>
                     )}
                     <Box sx={{ p: 2 }}>
                         <Box sx={{ m: "auto", textAlign: "center" }}>

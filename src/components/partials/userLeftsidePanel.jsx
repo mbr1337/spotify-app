@@ -11,7 +11,7 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import PodcastsIcon from '@mui/icons-material/Podcasts';
 import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import UserPlaylists from "./userPlaylists";
+import PlaylistList from "./playlistList";
 
 function UserLeftsidePanel() {
 
@@ -26,13 +26,13 @@ function UserLeftsidePanel() {
 
                     const allPlaylists = [];
                     allPlaylists.push(...response.data.items);
-                    console.log("First 50 Playlists:", allPlaylists);
+                    // console.log("First 50 Playlists:", allPlaylists);
                     let nextUrl = response.data.next;
                     while (nextUrl) {
                         const nextResponse = await axios.get(nextUrl, getApiConfig(token));
                         if (nextResponse.status === 200) {
-                            console.log(`fetching next ${nextResponse.data.items.length} playlists...`);
-                            console.log(nextResponse.data.items);
+                            // console.log(`fetching next ${nextResponse.data.items.length} playlists...`);
+                            // console.log(nextResponse.data.items);
                             allPlaylists.push(...nextResponse.data.items);
                             nextUrl = nextResponse.data.next;
                         } else {
@@ -56,10 +56,10 @@ function UserLeftsidePanel() {
         <>
             <Fade in={true} timeout={2000} data-testid="user-playlists">
                 <Box>
-                    <Typography variant="h2" sx={{ m: 2, fontWeight: "semi-bold" }}>Discover</Typography>
+                    <Typography variant="h3" sx={{ m: 2, fontWeight: "semi-bold" }}>Discover</Typography>
                     <Grid container>
                         {[
-                            { icon: <PersonOutlinedIcon />, link: "/", text: "Home" },
+                            { icon: <PersonOutlinedIcon />, link: "/home", text: "Home" },
                             { icon: <PersonOutlinedIcon />, link: "./newReleases", text: "Made for You" },
                             { icon: <MicNoneIcon />, link: "./favoriteArtists", text: "Favorite Artists" },
                             { icon: <MusicNoteIcon />, link: "./favoriteSongs", text: "Favorite Songs" },
@@ -71,7 +71,7 @@ function UserLeftsidePanel() {
                                         {item.icon}
                                     </Grid>
                                     <Grid item p={1}>
-                                        <Typography variant="h3">
+                                        <Typography variant="h4">
                                             <Link to={item.link} className="hvr-underline-from-left">
                                                 {item.text}
                                             </Link>
@@ -81,7 +81,7 @@ function UserLeftsidePanel() {
                             </Grid>
                         ))}
                     </Grid>
-                    <Typography variant="h2" sx={{ m: 2, fontWeight: "semi-bold" }}>Library</Typography>
+                    <Typography variant="h3" sx={{ m: 2, fontWeight: "semi-bold" }}>Library</Typography>
                     <Grid container>
                         {[
                             { icon: <QueueMusicIcon />, link: "./playlists", text: "Playlists" },
@@ -94,7 +94,7 @@ function UserLeftsidePanel() {
                                         {item.icon}
                                     </Grid>
                                     <Grid item p={1}>
-                                        <Typography variant="h3">
+                                        <Typography variant="h4">
                                             <Link to={item.link} className="hvr-underline-from-left">
                                                 {item.text}
                                             </Link>
@@ -108,7 +108,7 @@ function UserLeftsidePanel() {
             </Fade>
             <Fade in={true} timeout={2000}>
                 <Box>
-                    <Typography variant="h2" sx={{ m: 2, fontWeight: "semi-bold" }}>Playlists</Typography>
+                    <Typography variant="h3" sx={{ m: 2, fontWeight: "semi-bold" }}>Playlists</Typography>
                     <Grid container>
                         {!userPlaylists ? (
                             <>
@@ -121,7 +121,7 @@ function UserLeftsidePanel() {
                                 ))}
                             </>
                         ) : (
-                            <UserPlaylists playlists={userPlaylists} />
+                            <PlaylistList playlists={userPlaylists} />
                         )}
                     </Grid>
                 </Box>

@@ -16,6 +16,7 @@ function NewReleases() {
             try {
                 const response = await axios.get(endpoints.newReleases, getApiConfig(token));
                 if (response.status === 200) {
+                    console.log('new releases: ', response.data.albums.items)
                     setReleases(response.data.albums.items);
                 }
                 if (response.status === 401) {
@@ -42,7 +43,7 @@ function NewReleases() {
                     {releases ? releases.map((release, index) => (
                         <Zoom in={true} timeout={500} key={release.id} style={{ transitionDelay: `${500 + index * 100}ms` }}>
                             <Grid2 xs={12} md={6} lg={4} sx={{ textAlign: "center" }}>
-                                <a href={release.external_urls.spotify} target="_blank">
+                                <a href={release.external_urls.spotify} target="_blank" rel="noreferrer" >
                                     <img
                                         src={release.images[0].url}
                                         alt={release.name}
