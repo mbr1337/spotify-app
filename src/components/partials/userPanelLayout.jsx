@@ -29,9 +29,12 @@ function UserPanelLayout({ children }) {
     );
     {/* 
     TODO:
-        podcasts skeletons
+        podcasts skeletons + podcasT skeletons
         made for you za duże
-        saved albums bubble chart za duże bubble, pominąc na mobilkach ?
+        saved albums bubble chart za duże bubble, pominąc na mobilkach ? + zmniejszyć bąbelki algorytmem
+        Podcasts - wiadomość gdy użytkownik widział już wszystkie odcinki podcastu 
+        top tracks - jesli nie bedzie genre to lg = 12 :v
+        hover effect jak na playlsitach do podcastow 
 
         https://developer.spotify.com/documentation/web-api/reference/save-episodes-user
         refresh token
@@ -84,6 +87,7 @@ function UserPanelLayout({ children }) {
         zabezpieczyc images gdyby nie bylo dla utworu, artysty
         zabezpieczyć home gdyby nie było itemków
         100vh ale na mobilkach bez
+        podcasts padding 
     
 
 
