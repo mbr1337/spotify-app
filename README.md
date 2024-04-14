@@ -1,8 +1,3 @@
-# Akademia Tarnowska
-
-## Kurs
-Testowanie i Jakość oprogramowania + praca inżynierska
-
 ## Autor
 Mikołaj Bryndal
 
