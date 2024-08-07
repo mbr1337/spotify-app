@@ -3,7 +3,7 @@ import axios from 'axios';
 import { endpoints } from "../../../endpoints";
 import { useSelector } from "react-redux";
 import getApiConfig from "../../../utils/axiosConfig";
-import { Skeleton, Typography, Zoom } from "@mui/material";
+import { Box, Skeleton, Typography, Zoom } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Link } from "react-router-dom";
 function SavedPodcasts() {
@@ -67,13 +67,15 @@ function SavedPodcasts() {
                                 style={{ transitionDelay: `${300 + index * 100}ms` }}
                             >
                                 <Grid2 xs={12} sm={6} md={4} lg={3} >
-                                    <Link to={`/podcast/${show.id}`}>
-                                        <img src={show.images[0].url} alt={show.name}
-                                            className="playlistCards"
-                                            loading="lazy"
-                                        />
-                                        <Typography variant="h4" sx={{ textAlign: "center" }}>{show.name}</Typography>
-                                    </Link>
+                                    <Box >
+                                        <Link to={`/podcast/${show.id}`}>
+                                            <img src={show.images[0].url} alt={show.name}
+                                                className="playlistCards"
+                                                loading="lazy"
+                                            />
+                                            <Typography variant="h4" sx={{ textAlign: "center" }}>{show.name}</Typography>
+                                        </Link>
+                                    </Box>
                                 </Grid2>
                             </Zoom>
                         )

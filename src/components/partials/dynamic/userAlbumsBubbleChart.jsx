@@ -19,23 +19,7 @@ function UserAlbumsBubbleChart({ userAlbums }) {
         return { minDate, maxDate };
     };
 
-    const generateMonths = (dateRange) => {
-        const months = [];
-        const date = new Date(Date.UTC(dateRange.minDate.getUTCFullYear(), dateRange.minDate.getUTCMonth(), 1));
-
-        while (date <= dateRange.maxDate) {
-            months.push({
-                label: date.toLocaleString('default', { month: 'short', year: 'numeric' }),
-                value: new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1)).getTime(),
-            });
-            date.setUTCMonth(date.getUTCMonth() + 1);
-        }
-
-        return months;
-    };
-
     const dateRange = getAlbumDateRange(userAlbums);
-    const months = generateMonths(dateRange);
     const options = {
         scales: {
             x: {
@@ -81,10 +65,8 @@ function UserAlbumsBubbleChart({ userAlbums }) {
                 label: 'Albums',
                 data: userAlbums.map((album) => {
                     const date = new Date(album.added_at);
-                    const monthValue = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1)).getTime();
 
                     return {
-                        // x: monthValue,
                         x: date.getTime(),
                         y: album.album.popularity || 0,
                         r: album.album.popularity || 0,

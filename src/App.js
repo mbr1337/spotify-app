@@ -6,11 +6,11 @@ import './App.scss';
 import UserPanelLayout from './components/partials/userPanelLayout';
 import { Outlet } from 'react-router-dom';
 import { Container, Fade } from '@mui/material';
+import axios from 'axios';
 
 function App() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
-
   useEffect(() => {
     async function getToken() {
       try {
@@ -22,7 +22,6 @@ function App() {
         console.error('Error fetching token:', error);
       }
     }
-
     getToken();
   }, [dispatch]);
 

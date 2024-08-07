@@ -108,7 +108,7 @@ function UserFavSongs() {
                     <Grid2 xs={12} md={6}>
                         {artistsForChart && artistsForChart.length > 0 ? (
                             <ArtistPieChart artistCounts={artistsForChart} useGenre arcLabel={false} />
-                        ) : "Loading chart data..."}
+                        ) : "Loading genre chart data..."}
                     </Grid2>
                 </Grid2>
             </Box>

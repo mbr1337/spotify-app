@@ -47,3 +47,15 @@ describe('App component', () => {
         expect(childElement).toBeInTheDocument();
     });
 });
+
+        // given
+    test('GET /token should return the access token', async () => {
+        // when
+        const response = await request(app).get('/auth/token');
+        // then
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('access_token');
+        expect(response.body.access_token).toBe(getAccessToken());
+    });
+
+    

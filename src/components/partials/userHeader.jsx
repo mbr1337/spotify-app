@@ -59,7 +59,14 @@ function UserHeader() {
                 console.error('Axios error:', error);
             }
         }
+        // async function getneff() {
+        //     const response = await axios.get(`https://api.spotify.com/v1/tracks/4Tk9smArBivB3ZQI8e0FXf`, getApiConfig(token));
+        //     if (response.status === 200) {
+        //         console.log('response.data', response.data);
+        //     }
+        // }
         getUserData();
+        // getneff();
         // getNeffexData();
     }, [token, dispatch])
 

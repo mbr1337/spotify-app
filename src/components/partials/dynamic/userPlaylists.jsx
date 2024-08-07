@@ -81,13 +81,10 @@ function UserPlaylists() {
                             <Grid2 xs={6} sm={4} md={3} lg={2} sx={{ textAlign: "center" }} className="gridItem">
                                 <Link to={`/playlist/${playlist.id}`}>
                                     <Grid2 xs={12} sx={{ height: "200px", overflow: "hidden" }}>
-                                        {playlist.images[0] ? (
-                                            <img className="playlistCards" src={playlist?.images[0]?.url} alt={playlist.name}></img>
+                                        {playlist && playlist.images && playlist.images.length > 0 ? (
+                                            <img className="playlistCards" src={playlist.images[0].url} alt={playlist.name} />
                                         ) : (
-                                            <>
-                                                <img className="playlistCards" src={unknown_album_placeholder} alt={playlist.name}></img>
-
-                                            </>
+                                            <img className="playlistCards" src={unknown_album_placeholder} alt={playlist ? playlist.name : ''} />
                                         )}
                                     </Grid2>
                                     <Grid2 xs={12}>
