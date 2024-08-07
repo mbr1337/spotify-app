@@ -21,6 +21,7 @@
     "babel-plugin-polyfill-corejs3": "^0.10.4",
     "babel-plugin-polyfill-es-shims": "^0.10.5",
     "babel-plugin-polyfill-regenerator": "^0.6.2",
+    "babel-traverse": "^6.26.0",
     "bootstrap": "^5.3.2",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
