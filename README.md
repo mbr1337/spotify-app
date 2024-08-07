@@ -9,6 +9,10 @@ Testowanie backendu i komponentów z aplikacji internetowej służącej do monit
 Aplikacja monitorująca aktywność użytkownika w serwisie muzycznym Spotify. Projekt skupia się na dostarczeniu użytkownikom spersonalizowanego i wyjątkowego doświadczenia muzycznego poprzez analizę ich preferencji i zwyczajów słuchania muzyki.
 
 ![TIJO App](src/imgs/dashboard.png)
+![TIJO App](src/imgs/FavoriteArtists.png)
+![TIJO App](src/imgs/playlistDetails.jpg)
+![TIJO App](src/imgs/newReleases.png)
+
 
 ## Uruchomienie projektu
 

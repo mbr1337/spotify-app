@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { endpoints } from "../../../endpoints";
 import getApiConfig from "../../../utils/axiosConfig";
-import { Box, Fade, Skeleton, Typography, Zoom } from "@mui/material";
+import { Box, Fade, Hidden, Skeleton, Typography, Zoom } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useSelector } from "react-redux";
 import UserAlbumsBubbleChart from "./userAlbumsBubbleChart";
@@ -67,7 +67,9 @@ function UserAlbums() {
                     <Zoom in={true} timeout={750}>
                         <Typography variant="h2" sx={{ textAlign: "center", p: 2 }}>Saved albums:</Typography>
                     </Zoom>
-                    <UserAlbumsBubbleChart userAlbums={userAlbums} />
+                    <Hidden lgDown>
+                        <UserAlbumsBubbleChart userAlbums={userAlbums} />
+                    </Hidden>
                     <Grid2 container spacing={2}>
                         {userAlbums.map(({ added_at, album }, index) => {
                             const formattedDate = added_at.slice(0, 10);
