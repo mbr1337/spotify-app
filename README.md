@@ -2,7 +2,7 @@
 Mikołaj Bryndal
 
 ## Temat projektu
-Testowanie backendu i komponentów z aplikacji internetowej służącej do monitorowania aktywności użytkownika w serwisie muzycznym 
+Aplikacja internetowa służąca do monitorowania aktywności użytkownika w serwisie muzycznym 
 
 ## Opis projektu
 
